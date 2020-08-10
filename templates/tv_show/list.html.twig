@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<ul>
+{% for tvShow in tvShows %}
+    <li>
+        {{ tvShow.title }}
+
+        <ul>
+        {% for category in tvShow.categories %}
+            <li>{{ category.label }}</li>
+        {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}
