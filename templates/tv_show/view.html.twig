@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>{{ tvShow.title }}</h1>
+
+<ul class="list-inline">
+{% for category in tvShow.categories %}
+    <li class="list-inline-item"><a href="{{ path('category_view', {'id': category.id}) }}">{{ category.label }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}
