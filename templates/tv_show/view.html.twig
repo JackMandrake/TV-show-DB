@@ -5,8 +5,28 @@
 
 <ul class="list-inline">
 {% for category in tvShow.categories %}
-    <li class="list-inline-item"><a href="{{ path('category_view', {'id': category.id}) }}">{{ category.label }}</a></li>
+    <li class="list-inline-item">
+        <a href="{{ path('category_view', {'id': category.id}) }}">{{ category.label }}</a>
+    </li>
 {% endfor %}
+</ul>
+
+<h2>Personnages principaux</h2>
+
+<ul>
+    {% for character in tvShow.characters %}
+    <li>
+        {{ character.name }}
+        {% if character.actors is not empty %}
+        (
+            {% for actor in character.actors %}
+                {% if not loop.first %}, {% endif %}
+                {{ actor.firstName }} {{ actor.lastName }}
+            {% endfor %}
+        )
+        {% endif %}
+    </li>
+    {% endfor %}
 </ul>
 
 {% endblock %}

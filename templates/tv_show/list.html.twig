@@ -2,6 +2,16 @@
 
 {% block body %}
 
+<h2>Séries</h2>
+
+<form class="form-inline">
+  <div class="form-group mb-2 mr-2">
+    <input type="text" value="{{ app.request.get('search') }}" class="form-control" name="search" placeholder="Rechercher par titre">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
+</form>
+
+
 <div class="list-group">
     {% for tvShow in tvShows %}
         <a href="{{ path('tv_show_view', {'id': tvShow.id}) }}" class="list-group-item list-group-item-action">

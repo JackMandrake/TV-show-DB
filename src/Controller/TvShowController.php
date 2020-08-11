@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\TvShow;
+use App\Repository\TvShowRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TvShowController extends AbstractController
@@ -11,10 +13,13 @@ class TvShowController extends AbstractController
     /**
      * @Route("/tv-shows", name="tv_show_list")
      */
-    public function list()
+    public function list(Request $request)
     {
+        $search = $request->query->get('search');
+
+        /** @var TvShowRepository $repository */
         $repository = $this->getDoctrine()->getRepository(TvShow::class);
-        $tvShows = $repository->findAll();
+        $tvShows = $repository->findByTitle($search);
         
         return $this->render(
             'tv_show/list.html.twig',
@@ -27,11 +32,12 @@ class TvShowController extends AbstractController
     /**
      * @Route("/tv-show/{id}", name="tv_show_view", requirements={"id"="\d+"})
      */
-    public function view(TvShow $tvShow)
+    public function view($id)
     {
-        // Pas besoin avec le paramConverter de Doctrine
-        // $tvShow = $this->getDoctrine()->getRepository(TvShow::class)->find($id);
-        
+        /** @var TvShowRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(TvShow::class);
+        $tvShow = $repository->findWithCollections($id);
+
         return $this->render(
             'tv_show/view.html.twig',
              [

@@ -19,32 +19,38 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    // /**
-    //  * @return Category[] Returns an array of Category objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllOrderedByLabel()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        // je crée "l'usine" à requete
+        $queryBuilder = $this->createQueryBuilder('category');
 
-    /*
-    public function findOneBySomeField($value): ?Category
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        // fabrique une requete personnalisée
+        $queryBuilder->orderBy('category.label', 'asc');
+
+        // a la fin je recupère a la requete fabriquée
+        $query = $queryBuilder->getQuery();
+
+        // j'execute la requete pour en recupérer les resultats
+        // getResult me renvoi une LISTE des resultats 
+        return $query->getResult();
     }
-    */
+
+    public function findOneWithTvShows($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('category');
+
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq('category.id', $id)
+        );
+
+        $queryBuilder->leftJoin('category.tvShows', 'tvShow');
+        $queryBuilder->addSelect('tvShow');
+
+        $queryBuilder->orderBy('tvShow.title', 'asc');
+        
+        $query = $queryBuilder->getQuery();
+        
+        // me renvoi UN seul resultat 
+        return $query->getOneOrNullResult();
+    }
 }

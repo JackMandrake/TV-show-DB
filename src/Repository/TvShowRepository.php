@@ -19,32 +19,60 @@ class TvShowRepository extends ServiceEntityRepository
         parent::__construct($registry, TvShow::class);
     }
 
-    // /**
-    //  * @return TvShow[] Returns an array of TvShow objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    // cette méthode doit me renvoyer une series (qui correspond a l'id en parametre)
+    // cette série doit contenir les objet liés
+    // exemple : SI $id contient la valeur 6
+    public function findWithCollections($id)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        // de base ma requete ressemble à : SELECT * FROM tvShow
+        $queryBuilder = $this->createQueryBuilder('tvShow');
 
-    /*
-    public function findOneBySomeField($value): ?TvShow
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        // je personnalise ma requete
+
+        // je precise que je souhaite recupérer un element grace a son ID
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq('tvShow.id', $id)
+        );
+        // maintenant le query builder va me donner une requete du genre :
+        // SELECT * FROM tvShow WHERE tvShow.id = 6
+
+        // je recupére les categories liés a ma serie
+        $queryBuilder->leftJoin('tvShow.categories', 'category');
+        // j'ajoute aux objets à créer les catégorie
+        $queryBuilder->addSelect('category');
+
+        $queryBuilder->leftJoin('tvShow.characters', 'character');
+        $queryBuilder->addSelect('character');
+
+        $queryBuilder->leftJoin('character.actors', 'actor');
+        $queryBuilder->addSelect('actor');
+
+        // j'ajoute meme des tri
+        $queryBuilder->addOrderBy('character.name');
+        $queryBuilder->addOrderBy('actor.firstName');
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getOneOrNullResult();
     }
-    */
+
+    public function findByTitle($search)
+    {
+        $queryBuilder = $this->createQueryBuilder('tvShow');
+
+        if(!empty($search)) {
+            // WHERE tvShow LIKE :search
+            $queryBuilder->where(
+                $queryBuilder->expr()->like('tvShow.title', ':search')
+            );
+            // WHERE tvShow LIKE '%star%'
+            $queryBuilder->setParameter('search', "%$search%");
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+
 }
