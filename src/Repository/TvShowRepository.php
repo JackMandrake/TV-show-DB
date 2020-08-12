@@ -60,14 +60,21 @@ class TvShowRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('tvShow');
 
+        $queryBuilder->leftJoin('tvShow.characters', 'character');
+
         if(!empty($search)) {
             // WHERE tvShow LIKE :search
             $queryBuilder->where(
-                $queryBuilder->expr()->like('tvShow.title', ':search')
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->like('tvShow.title', ':search'),
+                    $queryBuilder->expr()->like('character.name', ':search')
+                )
             );
             // WHERE tvShow LIKE '%star%'
             $queryBuilder->setParameter('search', "%$search%");
         }
+
+        $queryBuilder->addOrderBy('tvShow.title');
 
         $query = $queryBuilder->getQuery();
 

@@ -6,6 +6,7 @@ use App\Repository\TvShowRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TvShowRepository::class)
@@ -21,6 +22,9 @@ class TvShow
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=255, maxMessage="Cette valeur est trop longue (maximum {{ limit }} caractères)")
      */
     private $title;
 
@@ -31,6 +35,8 @@ class TvShow
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * 
+     * @Assert\Type("\DateTime")
      */
     private $releaseDate;
 
