@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\TvShow;
 use App\Form\TvShowType;
+use App\Form\TvShowDeleteType;
 use App\Repository\TvShowRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,6 +102,38 @@ class TvShowController extends AbstractController
             'tv_show/update.html.twig',
             [
                 "tvShowForm" => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route("/tvshow/{id}/delete", name="tv_show_delete")
+     */
+    public function delete(TvShow $tvShow, Request $request)
+    {
+       
+        // je demande a créer un formulaire grace à ma classe de formulaire
+        // et je fourni a mon nouveau formulaire l'objet qu'il doit manipuler
+        $form = $this->createForm(TvShowDeleteType::class, $tvShow);
+        // je demande au formulaire de recupérer les données dans la request
+        $form->handleRequest($request);
+        // automatiquement le formulaire a mis a jour mon objet $category
+               // Si des données ont été soumises dans le formulaire
+        
+            if ($form->isSubmitted() && $form->isValid()) {
+                // si je souhaite ajouter cette entité en base de donnée j'ai besoin du manager
+                $manager = $this->getDoctrine()->getManager();
+                $manager->remove($tvShow);
+                $manager->flush();
+                $this->addFlash("success", "La série a bien été supprimé");
+                return $this->redirectToRoute('tv_show_list');
+            }
+        
+        // on envoi une representation simplifiée du formulaire dans la template
+        return $this->render(
+            'tv_show/delete.html.twig',
+            [
+                "tvShowDeleteType" => $form->createView()
             ]
         );
     }

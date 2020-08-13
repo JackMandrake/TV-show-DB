@@ -7,6 +7,7 @@
     <h2>{{ tvShow.title }}</h2>
     <div>
         <a href="{{ path('tv_show_update', {'id': tvShow.id}) }}" class="btn btn-primary">Modifier</a>
+        <a href="{{ path('tv_show_delete', {'id': tvShow.id}) }}" class="btn btn-danger">Supprimer</a>
     </div>
 </div>
 

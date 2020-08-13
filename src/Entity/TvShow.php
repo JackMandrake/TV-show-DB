@@ -51,7 +51,7 @@ class TvShow
     private $characters;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="directedTvShows")
+     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="directedTvShows",)
      */
     private $directedBy;
 
