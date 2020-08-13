@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Ajouter une Catégorie</h2>
+
+{# 
+{{ form(tvShowForm) }} <form> <input ...> </form>
+#}
+
+{# https://symfony.com/doc/current/form/form_customization.html#form-functions-and-variables-reference #}
+
+
+{{ form_start(categoryForm) }} {# <form method=""post"> #}
+    
+    {# form_widget(tvShowForm) permet d'afficher tout les champs du formulaire d'un coup #}
+
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(categoryForm.label) }}
+        </div>
+    </div>
+    
+
+    <input type="submit" value="Ajouter" class="btn btn-primary">
+{{ form_end(categoryForm) }} {# </form> #}
+
+{% endblock %}

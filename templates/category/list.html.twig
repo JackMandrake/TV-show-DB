@@ -2,6 +2,14 @@
 
 {% block body %}
 
+<div class="d-flex flex-row justify-content-between">
+    <h2>Catégories</h2>
+    <div>
+        <a href="{{ path('category_add') }}" class="btn btn-primary">Ajouter</a>
+    </div>
+</div>
+
+
 <div class="list-group">
     {% for category in categories %}
         <a href="{{ path('category_view', {'id': category.id}) }}" class="list-group-item list-group-item-action">

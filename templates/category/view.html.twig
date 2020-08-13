@@ -2,9 +2,14 @@
 
 {% block body %}
 
+<div class="d-flex flex-row justify-content-between">
 <h1>{{ category.label }}</h1>
-
-
+    <div>
+        <a href="{{ path('category_update', {'id': category.id}) }}" class="btn btn-primary">Modifier</a>
+        <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-danger">Supprimer</a>
+    </div>
+        
+ </div>
 <div class="list-group">
     {% for tvShow in category.tvShows %}
         <a href="{{ path('tv_show_view', {'id': tvShow.id}) }}" class="list-group-item list-group-item-action">
