@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\CategoryType;
 use App\Entity\Category;
+use App\Entity\TvShow;
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -107,14 +108,18 @@ class CategoryController extends AbstractController
         // je demande au formulaire de recupérer les données dans la request
         $form->handleRequest($request);
         // automatiquement le formulaire a mis a jour mon objet $category
-
-        // Si des données ont été soumises dans le formulaire
-        if($form->isSubmitted() && $form->isValid()) {
-            // si je souhaite ajouter cette entité en base de donnée j'ai besoin du manager
-            $manager = $this->getDoctrine()->getManager();
-            $manager->remove($category);
-            $manager->flush();
-            $this->addFlash("success", "La category a bien été supprimé");
+               // Si des données ont été soumises dans le formulaire
+        if ($category->getTvShows()->isEmpty()) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                // si je souhaite ajouter cette entité en base de donnée j'ai besoin du manager
+                $manager = $this->getDoctrine()->getManager();
+                $manager->remove($category);
+                $manager->flush();
+                $this->addFlash("success", "La category a bien été supprimé");
+                return $this->redirectToRoute('category_list');
+            }
+        } else {
+            $this->addFlash("danger", "La catégorie est liée à une série");
             return $this->redirectToRoute('category_list');
         }
 
