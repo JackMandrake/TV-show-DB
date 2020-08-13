@@ -19,6 +19,42 @@ class CharacterRepository extends ServiceEntityRepository
         parent::__construct($registry, Character::class);
     }
 
+    public function findAllOrderedByName()
+    {
+        // je crée "l'usine" à requete
+        $queryBuilder = $this->createQueryBuilder('character');
+
+        // fabrique une requete personnalisée
+        $queryBuilder->orderBy('character.name', 'asc');
+
+        // a la fin je recupère a la requete fabriquée
+        $query = $queryBuilder->getQuery();
+
+        // j'execute la requete pour en recupérer les resultats
+        // getResult me renvoi une LISTE des resultats 
+        return $query->getResult();
+    }
+
+    public function findOneWithCharacter($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('character');
+
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq('character.id', $id)
+        );
+
+        $queryBuilder->leftJoin('character.tvShow', 'tvShows');
+        $queryBuilder->addSelect('tvShows');
+
+        $queryBuilder->orderBy('tvShows.title', 'asc');
+        
+        $query = $queryBuilder->getQuery();
+        
+        // me renvoi UN seul resultat 
+        return $query->getOneOrNullResult();
+    }
+
+    
     // /**
     //  * @return Character[] Returns an array of Character objects
     //  */

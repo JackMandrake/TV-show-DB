@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="d-flex flex-row justify-content-between">
+    <h2>Personnages</h2>
+    <div>
+        <a href="{{ path('character_add') }}" class="btn btn-primary">Ajouter</a>
+    </div>
+</div>
+
+<form class="form-inline my-5">
+  <div class="form-group mr-2">
+    <input type="text" value="{{ app.request.get('search') }}" class="form-control" name="search" placeholder="Rechercher par titre">
+  </div>
+  <button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+
+
+<div class="list-group">
+    {% for character in characters %}
+        <a href="{{ path('character_view', {'id': character.id}) }}" class="list-group-item list-group-item-action">
+            {{ character.name }}
+        </a>
+    {% endfor %}
+</div>
+
+{% endblock %}

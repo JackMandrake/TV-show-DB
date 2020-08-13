@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="d-flex flex-row justify-content-between">
+<h1>{{ character.name }}</h1>
+    <div>
+        <a href="{{ path('character_update', {'id': character.id}) }}" class="btn btn-primary">Modifier</a>
+        <a href="{{ path('character_delete', {'id': character.id}) }}" class="btn btn-danger">Supprimer</a>
+    </div>
+        
+ </div>
+
+<h3>Apparait dans :</h3>
+            <a href="{{ path('tv_show_view', {'id': character.tvShow.id}) }}" class="list-group-item list-group-item-action">
+                {{ character.tvShow.title }}
+            </a>
+</div>
+
+
+{% endblock %}
+
+
+
+    

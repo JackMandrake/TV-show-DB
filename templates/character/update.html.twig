@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Modifier un personnage</h2>
+
+{{ form_start(characterForm) }}
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(characterForm.name) }}
+            {{ form_row(characterForm.tvShow) }}
+        </div>
+    </div>
+    <input type="submit" value="Modifier" class="btn btn-primary">
+{{ form_end(characterForm) }} 
+
+{% endblock %}
